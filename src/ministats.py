@@ -1,6 +1,7 @@
 """ministats - A lightweight Python library for basic statistical functions.
 
-This module combines all statistical functions into a single file for simplicity.
+This module combines all statistical functions into a single file for
+ simplicity.
 """
 
 import math
@@ -12,13 +13,14 @@ import numpy as np
 # Type alias for numeric lists
 NumericList = list[Union[int, float]]
 
+
 class Validator:
     """Validation utility methods for statistical calculations."""
 
     @staticmethod
     def validate_numeric_list(data: NumericList) -> None:
         """Validate that input data is a non-empty list of numeric values.
-        
+
         Args:
             data: List of numeric values to validate
         Raises:
@@ -31,11 +33,11 @@ class Validator:
             raise ValueError("Input list cannot be empty")
         if not all(isinstance(x, (int, float)) for x in data):
             raise TypeError("All elements must be numeric")
-    
+
     @staticmethod
     def validate_equal_length(data1: NumericList, data2: NumericList) -> None:
         """Validate that two lists have equal length.
-        
+
         Args:
             data1: First list
             data2: Second list
@@ -50,7 +52,8 @@ class Validator:
 class CentralTendency:
     """Central tendency measures."""
 
-    def __init__(self,data: NumericList):
+    def __init__(self, data: NumericList):
+        """Initialize a CentralTendency object with data."""
         Validator.validate_numeric_list(data)
         self.data = data
 
@@ -68,6 +71,7 @@ class CentralTendency:
             ValueError: If input list is empty
         """
         return sum(self.data) / len(self.data)
+
     def median(self) -> float:
         """Calculate the median of a list of numbers.
 
@@ -87,14 +91,15 @@ class CentralTendency:
         if n % 2 == 0:
             return (sorted_data[mid - 1] + sorted_data[mid]) / 2
         return sorted_data[mid]
+
     def mode(self) -> Union[float, list[float]]:
         """Calculate the mode of a list of numbers.
-                      
+
         Args:
             data: List of numeric values
 
         Returns:
-            float or List[float]: Mode(s) of the input data. 
+            float or List[float]: Mode(s) of the input data.
             If multiple modes exist,returns a list of modes.
 
         Raises:
@@ -110,10 +115,11 @@ class CentralTendency:
 class Dispersion:
     """Dispersion measures."""
 
-    def __init__(self, data:NumericList):
+    def __init__(self, data: NumericList):
+        """Initialize a Dispersion object with data."""
         Validator.validate_numeric_list(data)
         self.data = data
-    
+
     def variance(self, sample: bool = True) -> float:
         """Calculate the variance of a list of numbers.
 
@@ -130,9 +136,9 @@ class Dispersion:
             ValueError: If input list is empty
         """
         data_mean = CentralTendency(self.data).mean()
-        squared_diff= [(x - data_mean) ** 2 for x in self.data]
+        squared_diff = [(x - data_mean) ** 2 for x in self.data]
         n = len(self.data)
-        return sum(squared_diff)/ (n - 1 if sample else n)
+        return sum(squared_diff) / (n - 1 if sample else n)
 
     def std_dev(self, sample: bool = True) -> float:
         """Calculate the standard deviation of a list of numbers.
@@ -166,9 +172,12 @@ class Dispersion:
         """
         return max(self.data) - min(self.data)
 
+
 class Correlation:
     """Correlation measures."""
-    def __init__(self, data1:NumericList, data2: NumericList):
+
+    def __init__(self, data1: NumericList, data2: NumericList):
+        """Initialize a Correlation object with data1 and data2."""
         Validator.validate_numeric_list(data1)
         Validator.validate_numeric_list(data2)
         Validator.validate_equal_length(data1, data2)
@@ -194,11 +203,10 @@ class Correlation:
         mean1 = CentralTendency(self.data1).mean()
         mean2 = CentralTendency(self.data2).mean()
         n = len(self.data1)
-        diffs =[
+        diffs = [
             (x - mean1) * (y - mean2) for x, y in zip(self.data1, self.data2)
         ]
-        return sum(diffs) / (n - 1 if sample else  n)
-
+        return sum(diffs) / (n - 1 if sample else n)
 
     def correlation(self) -> float:
         """Calculate the Pearson correlation coefficient between two lists of numbers.
@@ -214,7 +222,7 @@ class Correlation:
             TypeError: If inputs are not lists or contain non-numeric values
             ValueError: If input lists are empty or have different lengths
             ZeroDivisionError: If either dataset has zero standard deviation
-        """
+        """  # noqa: E501
         var1 = Dispersion(self.data1).variance()
         var2 = Dispersion(self.data2).variance()
 
