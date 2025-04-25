@@ -8,6 +8,7 @@ import math
 from collections import Counter
 from typing import Union
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 # Type alias for numeric lists
@@ -234,6 +235,48 @@ class Correlation:
         # Calculate correlation
         cov = self.covariance()
         return cov / (math.sqrt(var1) * math.sqrt(var2))
+
+
+class Visualizer:
+    """Visualization tools for statistical data."""
+
+    @staticmethod
+    def plot_histogram(data: NumericList, bins: int = 10) -> None:
+        """Plot a histogram of the data.
+
+        Args:
+            data: List of numeric values to plot
+            bins: Number of histograms
+        """
+        Validator.validate_numeric_list(data)
+
+        plt.figure()
+        plt.hist(data, bins=bins, edgecolor="black")
+        plt.title("Histogram")
+        plt.xlabel("Value")
+        plt.ylabel("Frequency")
+        plt.grid(True)
+        plt.show()
+
+    @staticmethod
+    def plot_scatter(data1: NumericList, data2: NumericList) -> None:
+        """Plot a scatter plot of two datasets.
+
+        Args:
+            data1: First list of numeric values (X-axis)
+            data2: Second list of numeric values (Y-axis)
+        """
+        Validator.validate_numeric_list(data1)
+        Validator.validate_numeric_list(data2)
+        Validator.validate_equal_length(data1, data2)
+
+        plt.figure()
+        plt.scatter(data1, data2)
+        plt.title("Scatter Plot")
+        plt.xlabel("Data 1")
+        plt.ylabel("Data 2")
+        plt.grid(True)
+        plt.show()
 
 
 # Version information
